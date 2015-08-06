@@ -78,7 +78,7 @@ public class KinesisSource extends AbstractSource implements Configurable, Polla
 
 		AWSCredentialsProvider credentialsProvider = null;
 		try {
-
+			LOG.info("accessKey from context: " + this.accessKey);
 			credentialsProvider = new InstanceProfileCredentialsProvider();
 			// Verify we can fetch credentials from the provider
 			credentialsProvider.getCredentials();
@@ -88,9 +88,10 @@ public class KinesisSource extends AbstractSource implements Configurable, Polla
 			LOG.info("Unable to obtain credentials from the IMDS, trying classpath properties", e);
 
 			credentialsProvider = new MyAwsCredential(accessKey,accessSecretKey);
-			credentialsProvider.getCredentials();
+			BasicAWSCredentials credentials = credentialsProvider.getCredentials();
 
 			LOG.info("Obtained credentials from the properties file.");
+			LOG.info("accessKey from classpath properties: " + credentials.accessKey);
 		}
 
 		try {
